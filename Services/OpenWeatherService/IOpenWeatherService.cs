@@ -1,6 +1,6 @@
 ﻿using WeatherCacheApi.Models;
 
-namespace WeatherCacheApi.Repositories.OpenWeatherService
+namespace WeatherCacheApi.Services.OpenWeatherService
 {
     public interface IOpenWeatherService
     {

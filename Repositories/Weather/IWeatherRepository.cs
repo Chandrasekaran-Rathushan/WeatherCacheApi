@@ -8,6 +8,5 @@ namespace WeatherCacheApi.Repositories.Weather
         Task<WeatherRecord?> GetByIdAsync(int id);
         Task<WeatherRecord?> GetByCityAsync(string city, string country);
         Task<WeatherRecord> InsertAsync(WeatherRecord record);
-        Task<IEnumerable<WeatherRecord>> InsertManyAsync(IEnumerable<WeatherRecord> records); // insert multiple records
     }
 }

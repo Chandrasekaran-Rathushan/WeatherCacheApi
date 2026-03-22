@@ -18,7 +18,7 @@ BEGIN
         WindSpeed               FLOAT          NOT NULL,
         FetchedAt               DATETIME2      NOT NULL
     );
-    
+
     CREATE INDEX IX_WeatherRecords_City_Country_FetchedAt
         ON [weather].[WeatherRecords] (City, Country, FetchedAt DESC);
 END

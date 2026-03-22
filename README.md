@@ -67,3 +67,56 @@ Response: JSON
             "name": "Colombo",
             "cod": 200
         }
+
+## Prerequisites
+- .NET 10.0 SDK
+- SQL Server (Express or any edition)
+- OpenWeatherMap API Key
+
+## Clone the repository
+    git clone https://github.com/Chandrasekaran-Rathushan/WeatherCacheApi
+
+
+## How to obtain an Api Key
+    - Go to https://home.openweathermap.org/users/sign_u and then login to openweathermap
+    - Then go to https://home.openweathermap.org/api_keys and then generate an api key
+    - In the project directory, run: dotnet user-secrets init
+    - Set your secret: dotnet user-secrets set "OpenWeather:ApiKey" "your_secret_value"
+
+## Table Schema
+    [weather].[WeatherRecords] (
+        Id                  INT IDENTITY(1,1) PRIMARY KEY,
+        City                NVARCHAR(100)  NOT NULL,
+        Country             NVARCHAR(10)   NOT NULL,
+        TemperatureCelsius  FLOAT          NOT NULL,
+        FeelsLikeCelsius    FLOAT          NOT NULL,
+        Humidity            INT            NOT NULL,
+        Description         NVARCHAR(255)  NOT NULL,
+        WindSpeed           FLOAT          NOT NULL,
+        FetchedAt           DATETIME2      NOT NULL
+    )
+
+## API Endpoints and usage
+
+    1. curl 'https://localhost:7081/api/Weather/city/{city}'
+      This is used to retrieve weather information for a given city. 
+      The query first checks whether data from the past hour exists in the database. 
+      If no recent data is found, the OpenWeather API is called, and the retrieved data is stored in the application database.
+
+    2. curl https://localhost:7081/api/Weather
+       Get all cached weather data in the table
+
+    3. curl https://localhost:7081/api/Weather/1
+       Retrieve the stored cached weather data using the Id colum
+
+   
+
+## How to build and run the project
+    Go to the project directory and run the following commands:
+        dotnet restore
+        dotnet build -c Release
+        dotnet run --project WeatherCacheApi.csproj
+
+    The API will listen on `http://localhost:7081` 
+
+     Apis can be exlpored through scalar UI: https://localhost:7081/scalar/v1

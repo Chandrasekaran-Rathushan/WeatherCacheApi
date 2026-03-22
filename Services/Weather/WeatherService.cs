@@ -1,6 +1,6 @@
 ﻿using WeatherCacheApi.Models;
-using WeatherCacheApi.Repositories.OpenWeatherService;
 using WeatherCacheApi.Repositories.Weather;
+using WeatherCacheApi.Services.OpenWeatherService;
 
 namespace WeatherCacheApi.Services.Weather
 {
@@ -26,7 +26,7 @@ namespace WeatherCacheApi.Services.Weather
 
         public async Task<WeatherRecord?> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _repo.GetByIdAsync(id);
         }
 
         public async Task<WeatherRecord> GetOrFetchByCityAsync(string city)

@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using WeatherCacheApi.Models;
 
-namespace WeatherCacheApi.Repositories.OpenWeatherService
+namespace WeatherCacheApi.Services.OpenWeatherService
 {
     public class OpenWeatherService : IOpenWeatherService
     {

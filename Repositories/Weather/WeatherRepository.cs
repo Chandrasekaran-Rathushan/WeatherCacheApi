@@ -18,8 +18,8 @@ namespace WeatherCacheApi.Repositories.Weather
             const string sql = """
             SELECT Id, City, Country, TemperatureCelsius, FeelsLikeCelsius,
                    Humidity, [Description], WindSpeed, FetchedAt
-            FROM [weather].[WeatherRecords]
-            ORDER BY FetchedAt DESC
+            FROM [weather].[WeatherRecords] WITH(NOLOCK)
+            ORDER BY City, Country, FetchedAt DESC
             """;
 
             return await _db.QueryAsync(sql, MapRow);
@@ -27,10 +27,11 @@ namespace WeatherCacheApi.Repositories.Weather
 
         public async Task<WeatherRecord?> GetByCityAsync(string city, string country)
         {
+            // get records greater than or equal to the current time minus one hour
             const string sql = """
             SELECT TOP 1 Id, City, Country, TemperatureCelsius, FeelsLikeCelsius,
                          Humidity, [Description], WindSpeed, FetchedAt
-            FROM [weather].[WeatherRecords]
+            FROM [weather].[WeatherRecords] WITH(NOLOCK)
             WHERE City = @City
               AND FetchedAt >= DATEADD(HOUR, -1, GETUTCDATE())
             ORDER BY FetchedAt DESC
@@ -44,7 +45,7 @@ namespace WeatherCacheApi.Repositories.Weather
             const string sql = """
             SELECT Id, City, Country, TemperatureCelsius, FeelsLikeCelsius,
                    Humidity, [Description], WindSpeed, FetchedAt
-            FROM [weather].[WeatherRecords]
+            FROM [weather].[WeatherRecords] WITH(NOLOCK)
             WHERE Id = @Id
             """;
 
@@ -80,19 +81,6 @@ namespace WeatherCacheApi.Repositories.Weather
             var newId = await _db.ExecuteScalarAsync<int>(sql, spParams);
             record.Id = newId;
             return record;
-        }
-
-        public async Task<IEnumerable<WeatherRecord>> InsertManyAsync(IEnumerable<WeatherRecord> records)
-        {
-            var list = records.ToList();
-
-            await _db.ExecuteInTransactionAsync(async () =>
-            {
-                foreach (var record in list)
-                    await InsertAsync(record);
-            });
-
-            return list;
         }
 
         private static WeatherRecord MapRow(SqlDataReader r) => new()

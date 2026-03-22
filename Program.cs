@@ -1,8 +1,8 @@
 using Scalar.AspNetCore;
 using SharedKernel.Middlewares;
 using WeatherCacheApi.Data;
-using WeatherCacheApi.Repositories.OpenWeatherService;
 using WeatherCacheApi.Repositories.Weather;
+using WeatherCacheApi.Services.OpenWeatherService;
 using WeatherCacheApi.Services.Weather;
 
 var builder = WebApplication.CreateBuilder(args);
