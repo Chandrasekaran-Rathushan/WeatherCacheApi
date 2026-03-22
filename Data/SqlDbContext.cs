@@ -2,7 +2,7 @@
 
 namespace WeatherCacheApi.Data;
 
-public class SqlDbContext : IAsyncDisposable
+public class SqlDbContext : IAsyncDisposable, IDisposable
 {
     private readonly string _connectionString;
     private readonly ILogger<SqlDbContext> _logger;
@@ -158,5 +158,10 @@ public class SqlDbContext : IAsyncDisposable
             _connection = null;
             _logger.LogDebug("SQL connection closed.");
         }
+    }
+
+    public void Dispose()
+    {
+        DisposeAsync().AsTask().GetAwaiter().GetResult();
     }
 }

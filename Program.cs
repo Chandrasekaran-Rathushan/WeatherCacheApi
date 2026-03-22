@@ -28,12 +28,11 @@ builder.Services.AddOpenApi();
 var app = builder.Build();
 
 // DB init on project startup
-using (var scope = app.Services.CreateScope())
+await using (var scope = app.Services.CreateAsyncScope())
 {
     var dbInit = scope.ServiceProvider.GetRequiredService<DatabaseInitializer>();
     await dbInit.InitializeAsync();
 }
-
 
 app.UseMiddleware<ErrorHandlingMiddleware>();
 

@@ -16,6 +16,13 @@ public class DatabaseInitializer
     {
         const string sql = """
             IF NOT EXISTS (
+                SELECT 1 FROM sys.schemas WHERE name = 'weather'
+            )
+            BEGIN
+                EXEC('CREATE SCHEMA weather');
+            END;
+
+            IF NOT EXISTS (
                 SELECT 1 FROM INFORMATION_SCHEMA.TABLES
                 WHERE TABLE_SCHEMA = 'weather'
                     AND TABLE_NAME = 'WeatherRecords'
