@@ -17,8 +17,8 @@ namespace WeatherCacheApi.Repositories.Weather
         {
             const string sql = """
             SELECT Id, City, Country, TemperatureCelsius, FeelsLikeCelsius,
-                   Humidity, Description, WindSpeed, FetchedAt
-            FROM WeatherRecords
+                   Humidity, [Description], WindSpeed, FetchedAt
+            FROM [weather].[WeatherRecords]
             ORDER BY FetchedAt DESC
             """;
 
@@ -29,8 +29,8 @@ namespace WeatherCacheApi.Repositories.Weather
         {
             const string sql = """
             SELECT TOP 1 Id, City, Country, TemperatureCelsius, FeelsLikeCelsius,
-                         Humidity, Description, WindSpeed, FetchedAt
-            FROM WeatherRecords
+                         Humidity, [Description], WindSpeed, FetchedAt
+            FROM [weather].[WeatherRecords]
             WHERE City = @City
               AND FetchedAt >= DATEADD(HOUR, -1, GETUTCDATE())
             ORDER BY FetchedAt DESC
@@ -43,8 +43,8 @@ namespace WeatherCacheApi.Repositories.Weather
         {
             const string sql = """
             SELECT Id, City, Country, TemperatureCelsius, FeelsLikeCelsius,
-                   Humidity, Description, WindSpeed, FetchedAt
-            FROM WeatherRecords
+                   Humidity, [Description], WindSpeed, FetchedAt
+            FROM [weather].[WeatherRecords]
             WHERE Id = @Id
             """;
 
@@ -57,9 +57,9 @@ namespace WeatherCacheApi.Repositories.Weather
         public async Task<WeatherRecord> InsertAsync(WeatherRecord record)
         {
             const string sql = """
-            INSERT INTO WeatherRecords
+            INSERT INTO [weather].[WeatherRecords]
                 (City, Country, TemperatureCelsius, FeelsLikeCelsius,
-                 Humidity, Description, WindSpeed, FetchedAt)
+                 Humidity, [Description], WindSpeed, FetchedAt)
             OUTPUT INSERTED.Id
             VALUES
                 (@City, @Country, @TemperatureCelsius, @FeelsLikeCelsius,
