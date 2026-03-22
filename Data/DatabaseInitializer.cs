@@ -17,10 +17,11 @@ public class DatabaseInitializer
         const string sql = """
             IF NOT EXISTS (
                 SELECT 1 FROM INFORMATION_SCHEMA.TABLES
-                WHERE TABLE_NAME = 'WeatherRecords'
+                WHERE TABLE_SCHEMA = 'weather'
+                    AND TABLE_NAME = 'WeatherRecords'
             )
             BEGIN
-                CREATE TABLE WeatherRecords (
+                CREATE TABLE [weather].[WeatherRecords] (
                     Id                  INT IDENTITY(1,1) PRIMARY KEY,
                     City                NVARCHAR(100)  NOT NULL,
                     Country             NVARCHAR(10)   NOT NULL,
@@ -33,7 +34,7 @@ public class DatabaseInitializer
                 );
 
                 CREATE INDEX IX_WeatherRecords_City_Country_FetchedAt
-                    ON WeatherRecords (City, Country, FetchedAt DESC);
+                    ON [weather].[WeatherRecords] (City, Country, FetchedAt DESC);
             END
             """;
 
