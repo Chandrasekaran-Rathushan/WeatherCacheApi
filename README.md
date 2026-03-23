@@ -84,17 +84,41 @@ Response: JSON
     - Set your secret: dotnet user-secrets set "OpenWeather:ApiKey" "your_secret_value"
 
 ## Table Schema
-    [weather].[WeatherRecords] (
-        Id                  INT IDENTITY(1,1) PRIMARY KEY,
-        City                NVARCHAR(100)  NOT NULL,
-        Country             NVARCHAR(10)   NOT NULL,
-        TemperatureCelsius  FLOAT          NOT NULL,
-        FeelsLikeCelsius    FLOAT          NOT NULL,
-        Humidity            INT            NOT NULL,
-        Description         NVARCHAR(255)  NOT NULL,
-        WindSpeed           FLOAT          NOT NULL,
-        FetchedAt           DATETIME2      NOT NULL
+    CREATE DATABASE [WeatherCache]
+    GO
+
+    USE [WeatherCache]
+    GO
+
+    IF NOT EXISTS (
+        SELECT * FROM sys.schemas WHERE name = 'weather'
     )
+    BEGIN
+        EXEC('CREATE SCHEMA weather');
+    END
+    GO
+
+    IF NOT EXISTS (
+        SELECT 1 FROM INFORMATION_SCHEMA.TABLES
+        WHERE TABLE_SCHEMA = 'weather'
+          AND TABLE_NAME = 'WeatherRecords'
+    )
+    BEGIN
+        CREATE TABLE [weather].[WeatherRecords] (
+            Id                      INT IDENTITY(1,1) PRIMARY KEY,
+            City                    NVARCHAR(100)  NOT NULL,
+            Country                 NVARCHAR(10)   NOT NULL,
+            TemperatureCelsius      FLOAT          NOT NULL,
+            FeelsLikeCelsius        FLOAT          NOT NULL,
+            Humidity                INT            NOT NULL,
+            [Description]           NVARCHAR(255)  NOT NULL,
+            WindSpeed               FLOAT          NOT NULL,
+            FetchedAt               DATETIME2      NOT NULL
+        );
+
+        CREATE INDEX IX_WeatherRecords_City_Country_FetchedAt
+            ON [weather].[WeatherRecords] (City, Country, FetchedAt DESC);
+    END
 
 ## API Endpoints and usage
 
@@ -109,6 +133,13 @@ Response: JSON
     3. curl https://localhost:7081/api/Weather/1
        Retrieve the stored cached weather data using the Id colum
 
+## Framework and Libraries Used
+    - Microsoft.AspNetCore.App: The ASP.NET Core framework for building web apps
+    - Microsoft.NETCore.App: - The core runtime & libraries for .NET applications
+
+    - Microsoft.Data.SqlClient: The official MS SQL Server driver
+    - Scalar.AspNetCore: Renders the interactive API documentation 
+    - Microsoft.AspNetCore.OpenApi: A built-in package that generates an OpenAPI spec at /openapi/v1.json, which Scalar uses for its UI.
    
 
 ## How to build and run the project

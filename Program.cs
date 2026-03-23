@@ -23,7 +23,6 @@ builder.Services.AddHttpClient<IOpenWeatherService, OpenWeatherService>();
 builder.Services.AddScoped<IWeatherService, WeatherService>();
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
