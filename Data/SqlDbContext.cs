@@ -2,6 +2,7 @@
 
 namespace WeatherCacheApi.Data;
 
+// reference: https://alistairevans.co.uk/2019/10/24/net-asynchronous-disposal-tips-for-implementing-iasyncdisposable-on-your-own-types/
 public class SqlDbContext : IAsyncDisposable
 {
     private readonly string _connectionString;
